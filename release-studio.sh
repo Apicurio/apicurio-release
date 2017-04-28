@@ -3,7 +3,7 @@
 set -e
 
 echo "---------------------------------------------------"
-echo " Releasing API Design Studio.  Many steps to follow."
+echo " Releasing Apicurio Studio.  Many steps to follow."
 echo " Please play along at home..."
 echo "---------------------------------------------------"
 echo ""
@@ -101,17 +101,17 @@ echo "---------------------------------------------------"
 echo ""
 mkdir -p target/git-repos
 cd target/git-repos
-git clone -b gh-pages git@github.com:apiman/apiman-studio.git www.designer.org
-git clone git@github.com:apiman/apiman-studio.git
+git clone -b gh-pages git@github.com:apicurio/apicurio-studio.git www.designer.org
+git clone git@github.com:apicurio/apicurio-studio.git
 git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ apistudio-release
 
 
 echo "---------------------------------------------------"
 echo " Update version #s and validate builds"
 echo "---------------------------------------------------"
-rm -rf ~/.m2/repository/io/apiman
+rm -rf ~/.m2/repository/io/apicurio
 pushd .
-cd apiman-studio
+cd apicurio-studio
 git checkout $BRANCH
 mvn versions:set -DnewVersion=$RELEASE_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
@@ -128,14 +128,14 @@ echo "---------------------------------------------------"
 echo "Signing and Archiving the Quickstart ZIP"
 echo "---------------------------------------------------"
 mkdir -p releases
-cp front-end/quickstart/target/api-design-studio-$RELEASE_VERSION-quickstart.zip releases/.
-gpg --armor --detach-sign releases/api-design-studio-$RELEASE_VERSION-quickstart.zip
+cp front-end/quickstart/target/apicurio-studio-$RELEASE_VERSION-quickstart.zip releases/.
+gpg --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 
 
 echo "---------------------------------------------------"
 echo "Performing automated GitHub release."
 echo "---------------------------------------------------"
-java -jar tools/release/target/apiman-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/api-design-studio-$RELEASE_VERSION-quickstart.zip
+java -jar tools/release/target/apicurio-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 echo ""
 
 
@@ -169,9 +169,9 @@ pushd .
 cd apistudio-release
 git rm -rf diy/apache*
 mkdir -p diy
-cp ../apiman-studio/releases/api-design-studio-$RELEASE_VERSION-quickstart.zip ./diy/api-design-studio-$RELEASE_VERSION-quickstart.zip
+cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 cd diy
-unzip api-design-studio-$RELEASE_VERSION-quickstart.zip
+unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 git add . --all
 git commit -m "Pushing release $RELEASE_VERSION to OpenShift Origin"
 git push origin master
