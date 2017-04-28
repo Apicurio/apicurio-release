@@ -57,7 +57,7 @@ echo "---------------------------------------------------"
 echo ""
 mkdir -p target/git-repos
 cd target/git-repos
-git clone git@github.com:EricWittmann/oai-ts-core.git
+git clone git@github.com:apicurio/oai-ts-core.git
 
 
 echo "---------------------------------------------------"
