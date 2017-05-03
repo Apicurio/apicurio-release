@@ -101,7 +101,7 @@ echo "---------------------------------------------------"
 echo ""
 mkdir -p target/git-repos
 cd target/git-repos
-git clone -b gh-pages git@github.com:apicurio/apicurio-studio.git www.designer.org
+git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
 git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ apistudio-release
 
@@ -154,11 +154,11 @@ echo "---------------------------------------------------"
 echo " Updating Project Web Site"
 echo "---------------------------------------------------"
 pushd .
-cd www.designer.org
+cd apicurio.github.io
 sed -i "s/version:.*/version: $RELEASE_VERSION/g" _config.yml
 git add .
 git commit -m 'Updating version info due to release of version $RELEASE_VERSION.'
-git push origin gh-pages
+git push origin
 popd
 
 
@@ -167,7 +167,7 @@ echo " Pushing to OpenShift (release)"
 echo "---------------------------------------------------"
 pushd .
 cd apistudio-release
-git rm -rf diy/apache*
+git rm -rf diy/api*
 mkdir -p diy
 cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 cd diy
