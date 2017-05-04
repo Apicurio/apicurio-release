@@ -135,7 +135,7 @@ gpg --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.z
 echo "---------------------------------------------------"
 echo "Performing automated GitHub release."
 echo "---------------------------------------------------"
-java -jar tools/release/target/apicurio-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
+java -jar tools/release/target/apicurio-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip --output-directory ./tools/release/target
 echo ""
 
 
@@ -156,9 +156,36 @@ echo "---------------------------------------------------"
 pushd .
 cd apicurio.github.io
 sed -i "s/version:.*/version: $RELEASE_VERSION/g" _config.yml
+cp ../apicurio-studio/tools/release/target/20*.json ./_data/releases/.
+cp ../apicurio-studio/tools/release/target/20*.json ./_data/latestRelease.json
 git add .
 git commit -m 'Updating version info due to release of version $RELEASE_VERSION.'
 git push origin
+popd
+
+
+echo "---------------------------------------------------"
+echo " Repacking quickstart for OpenShift"
+echo "---------------------------------------------------"
+mkdir -p .tmp
+pushd .
+cd .tmp
+cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./apicurio-studio-$RELEASE_VERSION-quickstart.zip
+unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
+rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
+mkdir -p ROOT.tmp
+cd ROOT.tmp
+cp ../apicurio-studio-$RELEASE_VERSION/webapps/ROOT.war .
+unzip ROOT.war
+rm ROOT.war
+curl https://raw.githubusercontent.com/Apicurio/apicurio-release/master/data/openshift/release-tracking.snippet -o tracking.snippet
+sed -e '/<!-- TRACKING -->/rtracking.snippet' index.html > index.html.updated
+rm index.html
+mv index.html.updated index.html
+zip -r * ../ROOT.war
+cd ..
+cp ROOT.war ./apicurio-studio-$RELEASE_VERSION/webapps/ROOT.war
+zip -r apicurio-studio-$RELEASE_VERSION-quickstart.zip apicurio-studio-$RELEASE_VERSION
 popd
 
 
@@ -169,7 +196,7 @@ pushd .
 cd apistudio-release
 git rm -rf diy/api*
 mkdir -p diy
-cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
+cp ../.tmp/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 cd diy
 unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 git add . --all
