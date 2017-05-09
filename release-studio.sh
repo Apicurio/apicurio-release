@@ -104,6 +104,7 @@ cd target/git-repos
 git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
 git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ apistudio-release
+git clone git@github.com:Apicurio/apicurio-docker.git
 
 
 echo "---------------------------------------------------"
@@ -202,6 +203,20 @@ unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 git add . --all
 git commit -m "Pushing release $RELEASE_VERSION to OpenShift Origin"
 git push origin master
+popd
+
+
+echo "---------------------------------------------------"
+echo " Update the docker image"
+echo "---------------------------------------------------"
+pushd .
+cd apicurio-docker/studio
+sed -i "s/ENV.RELEASE_VERSION..*/ENV RELEASE_VERSION $RELEASE_VERSION/g" Dockerfile
+git add . --all
+git commit -m "Created release $RELEASE_VERSION of apicurio-studio."
+git push origin master
+git tag -a -s -m "Tagging release $RELEASE_VERSION" $RELEASE_VERSION
+git push origin $RELEASE_VERSION
 popd
 
 
