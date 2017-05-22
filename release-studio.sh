@@ -183,7 +183,8 @@ curl https://raw.githubusercontent.com/Apicurio/apicurio-release/master/data/ope
 sed -e '/<!-- TRACKING -->/rtracking.snippet' index.html > index.html.updated
 rm index.html
 mv index.html.updated index.html
-zip -r * ../ROOT.war
+rm tracking.snippet
+zip -r ../ROOT.war *
 cd ..
 cp ROOT.war ./apicurio-studio-$RELEASE_VERSION/webapps/ROOT.war
 zip -r apicurio-studio-$RELEASE_VERSION-quickstart.zip apicurio-studio-$RELEASE_VERSION
