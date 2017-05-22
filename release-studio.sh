@@ -201,6 +201,7 @@ mkdir -p diy
 cp ../.tmp/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 cd diy
 unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
+rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
 git add . --all
 git commit -m "Pushing release $RELEASE_VERSION to OpenShift Origin"
 git push origin master
