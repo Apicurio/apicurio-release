@@ -160,7 +160,7 @@ sed -i "s/version:.*/version: $RELEASE_VERSION/g" _config.yml
 cp ../apicurio-studio/tools/release/target/20*.json ./_data/releases/.
 cp ../apicurio-studio/tools/release/target/20*.json ./_data/latestRelease.json
 git add .
-git commit -m 'Updating version info due to release of version $RELEASE_VERSION.'
+git commit -m "Updating version info due to release of version $RELEASE_VERSION."
 git push origin
 popd
 
