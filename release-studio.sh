@@ -103,7 +103,7 @@ mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
-git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ apistudio-release
+git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ release-apistudio.rhcloud.com
 git clone git@github.com:Apicurio/apicurio-docker.git
 
 
@@ -129,7 +129,7 @@ echo "---------------------------------------------------"
 echo "Signing and Archiving the Quickstart ZIP"
 echo "---------------------------------------------------"
 mkdir -p releases
-cp front-end/quickstart/target/apicurio-studio-$RELEASE_VERSION-quickstart.zip releases/.
+cp distro/quickstart/target/apicurio-studio-$RELEASE_VERSION-quickstart.zip releases/.
 gpg --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 
 
@@ -174,19 +174,19 @@ cd .tmp
 cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./apicurio-studio-$RELEASE_VERSION-quickstart.zip
 unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
-mkdir -p ROOT.tmp
-cd ROOT.tmp
-cp ../apicurio-studio-$RELEASE_VERSION/webapps/ROOT.war .
-unzip ROOT.war
-rm ROOT.war
+mkdir -p WAR.tmp
+cd WAR.tmp
+cp ../apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio-fe-wildfly-$RELEASE_VERSION.war WAR.war
+unzip WAR.war
+rm WAR.war
 curl https://raw.githubusercontent.com/Apicurio/apicurio-release/master/data/openshift/release-tracking.snippet -o tracking.snippet
 sed -e '/<!-- TRACKING -->/rtracking.snippet' index.html > index.html.updated
 rm index.html
 mv index.html.updated index.html
 rm tracking.snippet
-zip -r ../ROOT.war *
+zip -r ../WAR.war *
 cd ..
-cp ROOT.war ./apicurio-studio-$RELEASE_VERSION/webapps/ROOT.war
+cp WAR.war ./apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio-fe-wildfly-$RELEASE_VERSION.war
 zip -r apicurio-studio-$RELEASE_VERSION-quickstart.zip apicurio-studio-$RELEASE_VERSION
 popd
 
@@ -195,13 +195,14 @@ echo "---------------------------------------------------"
 echo " Pushing to OpenShift (release)"
 echo "---------------------------------------------------"
 pushd .
-cd apistudio-release
+cd release-apistudio.rhcloud.com
 git rm -rf diy/api*
 mkdir -p diy
 cp ../.tmp/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 cd diy
 unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
+mv apicurio-studio-$RELEASE_VERSION apicurio-studio
 git add . --all
 git commit -m "Pushing release $RELEASE_VERSION to OpenShift Origin"
 git push origin master
