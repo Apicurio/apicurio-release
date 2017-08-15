@@ -103,7 +103,7 @@ mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
-git clone ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ release-apistudio.rhcloud.com
+git clone --depth 1 ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ release-apistudio.rhcloud.com
 git clone git@github.com:Apicurio/apicurio-docker.git
 
 
@@ -176,7 +176,7 @@ unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
 rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
 mkdir -p WAR.tmp
 cd WAR.tmp
-cp ../apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio-fe-wildfly-$RELEASE_VERSION.war WAR.war
+cp ../apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio.war WAR.war
 unzip WAR.war
 rm WAR.war
 curl https://raw.githubusercontent.com/Apicurio/apicurio-release/master/data/openshift/release-tracking.snippet -o tracking.snippet
@@ -186,7 +186,7 @@ mv index.html.updated index.html
 rm tracking.snippet
 zip -r ../WAR.war *
 cd ..
-cp WAR.war ./apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio-fe-wildfly-$RELEASE_VERSION.war
+cp WAR.war ./apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio.war
 zip -r apicurio-studio-$RELEASE_VERSION-quickstart.zip apicurio-studio-$RELEASE_VERSION
 popd
 
