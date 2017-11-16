@@ -103,8 +103,6 @@ mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
-git clone --depth 1 ssh://58dcf5510c1e66fa6500017e@release-apistudio.rhcloud.com/~/git/release.git/ release-apistudio.rhcloud.com
-git clone git@github.com:Apicurio/apicurio-docker.git
 
 
 echo "---------------------------------------------------"
@@ -141,6 +139,13 @@ echo ""
 
 
 echo "---------------------------------------------------"
+echo "Creating Docker images."
+echo "---------------------------------------------------"
+docker build -t="apicurio/apicurio-studio-api"-t="apicurio/apicurio-studio-api:latest-release" -t="apicurio/apicurio-studio-api:$RELEASE_VERSION" --rm platforms/swarm/api/
+docker build -t="apicurio/apicurio-studio-ui"-t="apicurio/apicurio-studio-ui:latest-release" -t="apicurio/apicurio-studio-ui:$RELEASE_VERSION" --rm platforms/swarm/ui/
+
+
+echo "---------------------------------------------------"
 echo " Updating version #s for next snapshot version"
 echo "---------------------------------------------------"
 mvn versions:set -DnewVersion=$DEV_VERSION
@@ -166,61 +171,10 @@ popd
 
 
 echo "---------------------------------------------------"
-echo " Repacking quickstart for OpenShift"
+echo "Pushing docker images."
 echo "---------------------------------------------------"
-mkdir -p .tmp
-pushd .
-cd .tmp
-cp ../apicurio-studio/releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./apicurio-studio-$RELEASE_VERSION-quickstart.zip
-unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
-rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
-mkdir -p WAR.tmp
-cd WAR.tmp
-cp ../apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio.war WAR.war
-unzip WAR.war
-rm WAR.war
-curl https://raw.githubusercontent.com/Apicurio/apicurio-release/master/data/openshift/release-tracking.snippet -o tracking.snippet
-sed -e '/<!-- TRACKING -->/rtracking.snippet' index.html > index.html.updated
-rm index.html
-mv index.html.updated index.html
-rm tracking.snippet
-zip -r ../WAR.war *
-cd ..
-cp WAR.war ./apicurio-studio-$RELEASE_VERSION/standalone/deployments/apicurio-studio.war
-zip -r apicurio-studio-$RELEASE_VERSION-quickstart.zip apicurio-studio-$RELEASE_VERSION
-popd
-
-
-echo "---------------------------------------------------"
-echo " Pushing to OpenShift (release)"
-echo "---------------------------------------------------"
-pushd .
-cd release-apistudio.rhcloud.com
-git rm -rf diy/api*
-mkdir -p diy
-cp ../.tmp/apicurio-studio-$RELEASE_VERSION-quickstart.zip ./diy/apicurio-studio-$RELEASE_VERSION-quickstart.zip
-cd diy
-unzip apicurio-studio-$RELEASE_VERSION-quickstart.zip
-rm apicurio-studio-$RELEASE_VERSION-quickstart.zip
-mv apicurio-studio-$RELEASE_VERSION apicurio-studio
-git add . --all
-git commit -m "Pushing release $RELEASE_VERSION to OpenShift Origin"
-git push origin master
-popd
-
-
-echo "---------------------------------------------------"
-echo " Update the docker image"
-echo "---------------------------------------------------"
-pushd .
-cd apicurio-docker/studio
-sed -i "s/ENV.RELEASE_VERSION..*/ENV RELEASE_VERSION $RELEASE_VERSION/g" Dockerfile
-git add . --all
-git commit -m "Created release $RELEASE_VERSION of apicurio-studio."
-git push origin master
-git tag -a -s -m "Tagging release $RELEASE_VERSION" $RELEASE_VERSION
-git push origin $RELEASE_VERSION
-popd
+docker push apicurio/apicurio-studio-api
+docker push apicurio/apicurio-studio-ui
 
 
 echo ""
