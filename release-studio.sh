@@ -174,9 +174,13 @@ popd
 echo "---------------------------------------------------"
 echo "Pushing docker images."
 echo "---------------------------------------------------"
-docker push apicurio/apicurio-studio-api
-docker push apicurio/apicurio-studio-ws
-docker push apicurio/apicurio-studio-ui
+docker push apicurio/apicurio-studio-api:latest-release
+docker push apicurio/apicurio-studio-ws:latest-release
+docker push apicurio/apicurio-studio-ui:latest-release
+
+docker push apicurio/apicurio-studio-api:$RELEASE_VERSION
+docker push apicurio/apicurio-studio-ws:$RELEASE_VERSION
+docker push apicurio/apicurio-studio-ui:$RELEASE_VERSION
 
 
 echo ""
