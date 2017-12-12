@@ -141,9 +141,9 @@ echo ""
 echo "---------------------------------------------------"
 echo "Creating Docker images."
 echo "---------------------------------------------------"
-docker build -t="apicurio/apicurio-studio-api" -t="apicurio/apicurio-studio-api:latest-release" -t="apicurio/apicurio-studio-api:$RELEASE_VERSION" --rm platforms/swarm/api/
-docker build -t="apicurio/apicurio-studio-ws" -t="apicurio/apicurio-studio-ws:latest-release" -t="apicurio/apicurio-studio-ws:$RELEASE_VERSION" --rm platforms/swarm/ws/
-docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:latest-release" -t="apicurio/apicurio-studio-ui:$RELEASE_VERSION" --rm platforms/swarm/ui/
+docker build -t="apicurio/apicurio-studio-api:latest-release" -t="apicurio/apicurio-studio-api:$RELEASE_VERSION" --rm platforms/swarm/api/
+docker build -t="apicurio/apicurio-studio-ws:latest-release" -t="apicurio/apicurio-studio-ws:$RELEASE_VERSION" --rm platforms/swarm/ws/
+docker build -t="apicurio/apicurio-studio-ui:latest-release" -t="apicurio/apicurio-studio-ui:$RELEASE_VERSION" --rm platforms/swarm/ui/
 
 
 echo "---------------------------------------------------"
