@@ -58,6 +58,7 @@ echo ""
 mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:apicurio/oai-ts-core.git
+git clone git@github.com:apicurio/apicurio-studio.git
 
 
 echo "---------------------------------------------------"
@@ -86,6 +87,17 @@ yarn run package
 npm publish ./dist
 popd
 
+
+echo "---------------------------------------------------"
+echo " Deploy package to apicurio-studio (server)."
+echo "---------------------------------------------------"
+pushd .
+cp oai-ts-core/dist/bundles/OAI.umd.js apicurio-studio/back-end/hub-core/src/main/resources/js-lib/OAI.umd.js
+cd apicurio-studio
+git add back-end/hub-core/src/main/resources/js-lib/OAI.umd.js
+git commit -m "New release of oai-ts-core library."
+git push origin master
+popd
 
 echo ""
 echo ""
