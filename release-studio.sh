@@ -167,7 +167,7 @@ cp ../apicurio-studio/tools/release/target/20*.json ./_data/releases/.
 cp ../apicurio-studio/tools/release/target/20*.json ./_data/latestRelease.json
 git add .
 git commit -m "Updating version info due to release of version $RELEASE_VERSION."
-git push origin
+git push origin master
 popd
 
 
