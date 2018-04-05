@@ -92,13 +92,14 @@ docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:la
 echo "---------------------------------------------------"
 echo "Pushing docker images."
 echo "---------------------------------------------------"
-docker push apicurio/apicurio-studio-api:latest-snapshot
-docker push apicurio/apicurio-studio-ws:latest-snapshot
-docker push apicurio/apicurio-studio-ui:latest-snapshot
-
 docker push apicurio/apicurio-studio-api:latest
 docker push apicurio/apicurio-studio-ws:latest
 docker push apicurio/apicurio-studio-ui:latest
+
+
+docker push apicurio/apicurio-studio-api:latest-snapshot
+docker push apicurio/apicurio-studio-ws:latest-snapshot
+docker push apicurio/apicurio-studio-ui:latest-snapshot
 
 
 echo ""
