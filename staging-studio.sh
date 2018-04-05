@@ -96,6 +96,10 @@ docker push apicurio/apicurio-studio-api:latest-snapshot
 docker push apicurio/apicurio-studio-ws:latest-snapshot
 docker push apicurio/apicurio-studio-ui:latest-snapshot
 
+docker push apicurio/apicurio-studio-api:latest
+docker push apicurio/apicurio-studio-ws:latest
+docker push apicurio/apicurio-studio-ui:latest
+
 
 echo ""
 echo ""
