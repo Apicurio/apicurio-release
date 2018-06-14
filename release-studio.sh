@@ -116,11 +116,25 @@ mvn versions:set -DnewVersion=$RELEASE_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
 mvn clean install
 
+sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" front-end/studio/package.json
+
 git add .
 git commit -m "Prepare for release v$RELEASE_VERSION"
 git push origin $BRANCH
 git tag -a -s -m "Tagging release v$RELEASE_VERSION" v$RELEASE_VERSION
 git push origin v$RELEASE_VERSION
+
+
+echo "---------------------------------------------------"
+echo "Releasing Apicurio UI into NPM"
+echo "---------------------------------------------------"
+pushd .
+cd front-end/studio
+rm -rf dist
+yarn install
+yarn run package
+npm publish ./dist
+popd
 
 
 echo "---------------------------------------------------"
