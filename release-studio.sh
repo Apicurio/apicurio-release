@@ -117,6 +117,7 @@ find . -name '*.versionsBackup' -exec rm -f {} \;
 mvn clean install
 
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" front-end/studio/package.json
+sed -i "s/.Final//g" front-end/studio/package.json
 
 git add .
 git commit -m "Prepare for release v$RELEASE_VERSION"
