@@ -114,11 +114,20 @@ cd apicurio-studio
 git checkout $BRANCH
 mvn versions:set -DnewVersion=$RELEASE_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
+echo "Validating Apicurio Studio maven build"
 mvn clean install
 
-sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" front-end/studio/package.json
-sed -i "s/.Final//g" front-end/studio/package.json
+pushd .
+cd front-end/studio
+sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
+sed -i "s/.Final//g" package.json
+rm -rf dist
+yarn install
+echo "Validating Apicurio Studio UI build"
+yarn run package
+popd
 
+echo "Commit changes and push to Git"
 git add .
 git commit -m "Prepare for release v$RELEASE_VERSION"
 git push origin $BRANCH
@@ -127,11 +136,18 @@ git push origin v$RELEASE_VERSION
 
 
 echo "---------------------------------------------------"
+echo "Releasing Apicurio UI into Maven Central"
+echo "---------------------------------------------------"
+mvn install -P release -Dgpg.passphrase=$GPG_PASSPHRASE
+
+
+echo "---------------------------------------------------"
 echo "Releasing Apicurio UI into NPM"
 echo "---------------------------------------------------"
 pushd .
 cd front-end/studio
 rm -rf dist
+rm -rf node_modules
 yarn install
 yarn run package
 npm publish ./dist
