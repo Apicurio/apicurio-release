@@ -70,6 +70,7 @@ git checkout $BRANCH
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
 yarn install
 yarn test
+yarn run package
 git add package.json
 git commit -m "Prepare for release $RELEASE_VERSION"
 git push origin $BRANCH
@@ -83,7 +84,6 @@ echo " Create and release the package."
 echo "---------------------------------------------------"
 pushd .
 cd oai-ts-core
-yarn run package
 npm publish ./dist
 popd
 
