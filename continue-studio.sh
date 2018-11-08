@@ -84,97 +84,17 @@ echo "######################################"
 echo ""
 
 
-echo "---------------------------------------------------"
-echo " Resetting 'target' directory."
-echo "---------------------------------------------------"
-echo ""
-rm -rf target
-mkdir -p target
-cp README.md target/README.md
-gpg -s target/README.md
-rm target/README.md.gpg
-
-
-echo "---------------------------------------------------"
-echo " Checking out required git repos."
-echo "---------------------------------------------------"
-echo ""
-mkdir -p target/git-repos
 cd target/git-repos
-git clone git@github.com:Apicurio/apicurio.github.io.git
-git clone git@github.com:apicurio/apicurio-studio.git
-
-
-echo "---------------------------------------------------"
-echo " Update version #s and validate builds"
-echo "---------------------------------------------------"
-rm -rf ~/.m2/repository/io/apicurio
-pushd .
-cd apicurio-studio
-git checkout $BRANCH
-mvn versions:set -DnewVersion=$RELEASE_VERSION
-find . -name '*.versionsBackup' -exec rm -f {} \;
-echo "Validating Apicurio Studio maven build"
-mvn clean install
-
-pushd .
-cd front-end/studio
-sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
-sed -i "s/.Final//g" package.json
-rm -rf dist
-yarn install
-echo "Validating Apicurio Studio UI build"
-yarn run package
-popd
-
-echo "Commit changes and push to Git"
-git add .
-git commit -m "Prepare for release v$RELEASE_VERSION"
-git push origin $BRANCH
-git tag -a -s -m "Tagging release v$RELEASE_VERSION" v$RELEASE_VERSION
-git push origin v$RELEASE_VERSION
-
-
-echo "---------------------------------------------------"
-echo "Releasing Apicurio UI into Maven Central"
-echo "---------------------------------------------------"
-mvn install -P release -Dgpg.passphrase=$GPG_PASSPHRASE
-
-
-echo "---------------------------------------------------"
-echo "Releasing Apicurio UI into NPM"
-echo "---------------------------------------------------"
-pushd .
-cd front-end/studio
-rm -rf dist
-rm -rf node_modules
-yarn install
-yarn run package
-npm publish ./dist
-popd
-
-
-echo "---------------------------------------------------"
-echo "Signing and Archiving the Quickstart ZIP"
-echo "---------------------------------------------------"
-mkdir -p releases
-cp distro/quickstart/target/apicurio-studio-$RELEASE_VERSION-quickstart.zip releases/.
-gpg --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
-
-
-echo "---------------------------------------------------"
-echo "Performing automated GitHub release."
-echo "---------------------------------------------------"
-java -jar tools/release/target/apicurio-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip --output-directory ./tools/release/target
-echo ""
 
 
 echo "---------------------------------------------------"
 echo "Creating Docker images."
 echo "---------------------------------------------------"
-docker build -t="apicurio/apicurio-studio-api" -t="apicurio/apicurio-studio-api:latest-release" -t="apicurio/apicurio-studio-api:$RELEASE_VERSION" --rm platforms/thorntail/api/
-docker build -t="apicurio/apicurio-studio-ws" -t="apicurio/apicurio-studio-ws:latest-release" -t="apicurio/apicurio-studio-ws:$RELEASE_VERSION" --rm platforms/thorntail/ws/
-docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:latest-release" -t="apicurio/apicurio-studio-ui:$RELEASE_VERSION" --rm platforms/thorntail/ui/
+pushd .
+cd apicurio-studio
+docker build -t="apicurio/apicurio-studio-api" -t="apicurio/apicurio-studio-api:latest-release" -t="apicurio/apicurio-studio-api:$RELEASE_VERSION" --rm platforms/swarm/api/
+docker build -t="apicurio/apicurio-studio-ws" -t="apicurio/apicurio-studio-ws:latest-release" -t="apicurio/apicurio-studio-ws:$RELEASE_VERSION" --rm platforms/swarm/ws/
+docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:latest-release" -t="apicurio/apicurio-studio-ui:$RELEASE_VERSION" --rm platforms/swarm/ui/
 
 
 echo "---------------------------------------------------"

@@ -84,9 +84,9 @@ mvn clean install
 echo "---------------------------------------------------"
 echo "Creating Docker images."
 echo "---------------------------------------------------"
-docker build -t="apicurio/apicurio-studio-api" -t="apicurio/apicurio-studio-api:latest-snapshot" --rm platforms/swarm/api/
-docker build -t="apicurio/apicurio-studio-ws" -t="apicurio/apicurio-studio-ws:latest-snapshot" --rm platforms/swarm/ws/
-docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:latest-snapshot" --rm platforms/swarm/ui/
+docker build -t="apicurio/apicurio-studio-api" -t="apicurio/apicurio-studio-api:latest-snapshot" --rm platforms/thorntail/api/
+docker build -t="apicurio/apicurio-studio-ws" -t="apicurio/apicurio-studio-ws:latest-snapshot" --rm platforms/thorntail/ws/
+docker build -t="apicurio/apicurio-studio-ui" -t="apicurio/apicurio-studio-ui:latest-snapshot" --rm platforms/thorntail/ui/
 
 
 echo "---------------------------------------------------"
