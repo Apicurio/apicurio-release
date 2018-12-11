@@ -117,6 +117,9 @@ find . -name '*.versionsBackup' -exec rm -f {} \;
 echo "Validating Apicurio Studio maven build"
 mvn clean install
 
+
+echo "Update version in package.json"
+echo "---------------------------------------------------"
 pushd .
 cd front-end/studio
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
@@ -127,7 +130,17 @@ echo "Validating Apicurio Studio UI build"
 yarn run package
 popd
 
+
+echo "Update version in OpenShift template(s)"
+echo "---------------------------------------------------"
+pushd .
+cd distro/openshift
+sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-template.yml
+popd
+
+
 echo "Commit changes and push to Git"
+echo "---------------------------------------------------"
 git add .
 git commit -m "Prepare for release v$RELEASE_VERSION"
 git push origin $BRANCH
@@ -182,6 +195,11 @@ echo " Updating version #s for next snapshot version"
 echo "---------------------------------------------------"
 mvn versions:set -DnewVersion=$DEV_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
+echo "Restoring 'latest-version' as the ImageStream version in the OpenShift template(s)"
+pushd .
+cd distro/openshift
+sed -i "s/$RELEASE_VERSION/latest-version/g" apicurio-template.yml
+popd
 git add .
 git commit -m "Update to next development version: $DEV_VERSION"
 git push origin $BRANCH
