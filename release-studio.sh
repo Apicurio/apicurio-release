@@ -134,7 +134,7 @@ popd
 echo "Update version in OpenShift template(s)"
 echo "---------------------------------------------------"
 pushd .
-cd distro/openshifta
+cd distro/openshift
 sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-template.yml
 sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-standalone-template.yml
 popd
