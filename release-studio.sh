@@ -134,8 +134,9 @@ popd
 echo "Update version in OpenShift template(s)"
 echo "---------------------------------------------------"
 pushd .
-cd distro/openshift
+cd distro/openshifta
 sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-template.yml
+sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-standalone-template.yml
 popd
 
 
@@ -199,6 +200,7 @@ echo "Restoring 'latest-release' as the ImageStream version in the OpenShift tem
 pushd .
 cd distro/openshift
 sed -i "s/$RELEASE_VERSION/latest-release/g" apicurio-template.yml
+sed -i "s/$RELEASE_VERSION/latest-release/g" apicurio-standalone-template.yml
 popd
 git add .
 git commit -m "Update to next development version: $DEV_VERSION"
