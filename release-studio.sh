@@ -195,10 +195,10 @@ echo " Updating version #s for next snapshot version"
 echo "---------------------------------------------------"
 mvn versions:set -DnewVersion=$DEV_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
-echo "Restoring 'latest-version' as the ImageStream version in the OpenShift template(s)"
+echo "Restoring 'latest-release' as the ImageStream version in the OpenShift template(s)"
 pushd .
 cd distro/openshift
-sed -i "s/$RELEASE_VERSION/latest-version/g" apicurio-template.yml
+sed -i "s/$RELEASE_VERSION/latest-release/g" apicurio-template.yml
 popd
 git add .
 git commit -m "Update to next development version: $DEV_VERSION"
