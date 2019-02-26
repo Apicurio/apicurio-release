@@ -125,6 +125,7 @@ cd front-end/studio
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
 sed -i "s/.Final//g" package.json
 rm -rf dist
+rm -rf node_modules
 yarn install
 echo "Validating Apicurio Studio UI build"
 yarn run package
