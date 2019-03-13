@@ -124,11 +124,11 @@ pushd .
 cd front-end/studio
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" package.json
 sed -i "s/.Final//g" package.json
-rm -rf dist
+rm -rf dist*
 rm -rf node_modules
 yarn install
 echo "Validating Apicurio Studio UI build"
-yarn run package
+yarn run build
 popd
 
 
@@ -161,11 +161,11 @@ echo "Releasing Apicurio UI into NPM"
 echo "---------------------------------------------------"
 pushd .
 cd front-end/studio
-rm -rf dist
+rm -rf dist*
 rm -rf node_modules
 yarn install
-yarn run package
-npm publish ./dist
+yarn run build-editor
+npm publish ./dist-editor
 popd
 
 
