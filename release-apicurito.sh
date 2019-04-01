@@ -94,10 +94,10 @@ find . -name '*.versionsBackup' -exec rm -f {} \;
 sed -i "s/version.:.*/version\": \"$RELEASE_VERSION\",/g" ui/package.json
 mvn clean install -D::image
 git add ui/package.json pom.xml ui/pom.xml
-git commit -m "Prepare for release $RELEASE_VERSION"
-git push origin $BRANCH -s -S
+git commit -m "Prepare for release $RELEASE_VERSION" -s -S
+git push origin $BRANCH
 git tag -a -s -m "Tagging release $RELEASE_VERSION" $RELEASE_VERSION
-git push origin $RELEASE_VERSION -s -S
+git push origin $RELEASE_VERSION
 
 
 echo "---------------------------------------------------"
