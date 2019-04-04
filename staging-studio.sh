@@ -12,28 +12,6 @@ echo ""
 
 BRANCH=$1
 
-if [ -f .release.env ]
-then
-  source ./.release.env
-else
-  echo "Missing file: .release.env.  Please create this file and add the following env variables:"
-  echo "---"
-  echo "GITHUB_AUTH_PAT=<your_GitHub_PAT>"
-  echo "GPG_PASSPHRASE=<your_GPG_passphrase>"
-  echo "---"
-  echo ""
-  exit 1
-fi
-
-if [ "x$GITHUB_AUTH_PAT" = "x" ]
-then
-  echo "Environment variable missing from .release.env file: GITHUB_AUTH_PAT"
-fi
-if [ "x$GPG_PASSPHRASE" = "x" ]
-then
-  echo "Environment variable missing from .release.env file: GPG_PASSPHRASE"
-fi
-
 
 if [ "x$BRANCH" = "x" ]
 then
@@ -58,8 +36,6 @@ echo ""
 rm -rf target
 mkdir -p target
 cp README.md target/README.md
-gpg -s target/README.md
-rm target/README.md.gpg
 
 
 echo "---------------------------------------------------"
