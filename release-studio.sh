@@ -91,7 +91,7 @@ echo ""
 rm -rf target
 mkdir -p target
 cp README.md target/README.md
-gpg -s target/README.md
+echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 -s target/README.md
 rm target/README.md.gpg
 
 
@@ -146,6 +146,8 @@ echo "---------------------------------------------------"
 git add .
 git commit -m "Prepare for release v$RELEASE_VERSION"
 git push origin $BRANCH
+gpg -s README.md
+rm README.md.gpg
 git tag -a -s -m "Tagging release v$RELEASE_VERSION" v$RELEASE_VERSION
 git push origin v$RELEASE_VERSION
 
@@ -174,7 +176,7 @@ echo "Signing and Archiving the Quickstart ZIP"
 echo "---------------------------------------------------"
 mkdir -p releases
 cp distro/quickstart/target/apicurio-studio-$RELEASE_VERSION-quickstart.zip releases/.
-gpg --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
+echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --armor --detach-sign releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip
 
 
 echo "---------------------------------------------------"
