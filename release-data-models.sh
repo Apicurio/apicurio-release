@@ -118,6 +118,7 @@ echo "Releasing Apicurio Data Models into NPM"
 echo "---------------------------------------------------"
 pushd .
 cd target/ts
+sed -i "s/.Final//g" ./dist/package.json
 npm publish ./dist
 popd
 
