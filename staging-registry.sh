@@ -119,8 +119,8 @@ popd
 echo "---------------------------------------------------"
 echo "Pushing docker images."
 echo "---------------------------------------------------"
-docker push apicurio/apicurito-registry:latest
-docker push apicurio/apicurito-registry:latest-snapshot
+docker push apicurio/apicurio-registry:latest
+docker push apicurio/apicurio-registry:latest-snapshot
 
 echo ""
 echo ""
