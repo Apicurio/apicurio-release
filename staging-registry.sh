@@ -60,23 +60,23 @@ gpg -s target/README.md
 rm target/README.md.gpg
 
 
-echo "---------------------------------------------------"
-echo " Downloading and installing GraalVM"
-echo "---------------------------------------------------"
-echo ""
-mkdir -p target
-pushd .
-cd target
-curl https://github.com/oracle/graal/releases/download/vm-19.1.1/graalvm-ce-linux-amd64-19.1.1.tar.gz -O -J -L
-tar xfz graalvm-ce-linux-amd64-19.1.1.tar.gz
-mv graalvm-ce-19.1.1 .graalvm
-cd .graalvm
-GRAALVM_HOME=`pwd`
-export GRAALVM_HOME
-echo "GraalVM downloaded and installed to $GRAALVM_HOME"
-echo "Installing 'native-image'"
-$GRAALVM_HOME/bin/gu install native-image
-popd
+#echo "---------------------------------------------------"
+#echo " Downloading and installing GraalVM"
+#echo "---------------------------------------------------"
+# echo ""
+# mkdir -p target
+# pushd .
+# cd target
+# curl https://github.com/oracle/graal/releases/download/vm-19.1.1/graalvm-ce-linux-amd64-19.1.1.tar.gz -O -J -L
+# tar xfz graalvm-ce-linux-amd64-19.1.1.tar.gz
+# mv graalvm-ce-19.1.1 .graalvm
+# cd .graalvm
+# GRAALVM_HOME=`pwd`
+# export GRAALVM_HOME
+# echo "GraalVM downloaded and installed to $GRAALVM_HOME"
+# echo "Installing 'native-image'"
+# $GRAALVM_HOME/bin/gu install native-image
+# popd
 
 
 echo "---------------------------------------------------"
@@ -99,13 +99,13 @@ git checkout $BRANCH
 popd
 
 
-echo "---------------------------------------------------"
-echo " Validate native build"
-echo "---------------------------------------------------"
-pushd .
-cd apicurio-registry
-./mvnw clean package verify -Pnative
-popd
+# echo "---------------------------------------------------"
+# echo " Validate native build"
+# echo "---------------------------------------------------"
+# pushd .
+# cd apicurio-registry
+# ./mvnw clean package verify -Pnative
+# popd
 
 
 echo "---------------------------------------------------"
@@ -113,14 +113,14 @@ echo "Building docker images."
 echo "---------------------------------------------------"
 pushd .
 cd apicurio-registry/
-docker build -t="apicurio/apicurio-registry" -t="apicurio/apicurio-registry:latest-snapshot" -f distro/app-docker/src/main/docker/Dockerfile.native .
+docker build -t="apicurio/apicurio-registry" -t="apicurio/apicurio-registry:latest-snapshot" -f distro/app-docker/src/main/docker/Dockerfile.jvm .
 popd
 
-echo "---------------------------------------------------"
-echo "Pushing docker images."
-echo "---------------------------------------------------"
-docker push apicurio/apicurio-registry:latest
-docker push apicurio/apicurio-registry:latest-snapshot
+# echo "---------------------------------------------------"
+# echo "Pushing docker images."
+# echo "---------------------------------------------------"
+# docker push apicurio/apicurio-registry:latest
+# docker push apicurio/apicurio-registry:latest-snapshot
 
 echo ""
 echo ""
