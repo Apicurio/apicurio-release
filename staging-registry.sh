@@ -113,14 +113,14 @@ echo "Building docker images."
 echo "---------------------------------------------------"
 pushd .
 cd apicurio-registry/
-docker build -t="apicurio/apicurio-registry" -t="apicurio/apicurio-registry:latest-snapshot" -f distro/app-docker/src/main/docker/Dockerfile.jvm .
+docker build -t="apicurio/apicurio-registry" -t="apicurio/apicurio-registry:latest-snapshot" -f distro/docker/src/main/docker/Dockerfile.jvm .
 popd
 
 # echo "---------------------------------------------------"
 # echo "Pushing docker images."
 # echo "---------------------------------------------------"
-# docker push apicurio/apicurio-registry:latest
-# docker push apicurio/apicurio-registry:latest-snapshot
+docker push apicurio/apicurio-registry:latest
+docker push apicurio/apicurio-registry:latest-snapshot
 
 echo ""
 echo ""
