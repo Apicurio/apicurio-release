@@ -55,9 +55,6 @@ echo "---------------------------------------------------"
 echo ""
 rm -rf target
 mkdir -p target
-cp README.md target/README.md
-gpg -s target/README.md
-rm target/README.md.gpg
 
 
 #echo "---------------------------------------------------"
