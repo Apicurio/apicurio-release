@@ -93,7 +93,7 @@ git checkout $BRANCH
 mvn versions:set -DnewVersion=$RELEASE_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
 echo "Validating Apicurio Data Models maven build"
-mvn clean install
+mvn clean install -Ptranspilation
 
 
 echo "Commit changes and push to Git"
@@ -110,7 +110,7 @@ git push origin v$RELEASE_VERSION
 echo "---------------------------------------------------"
 echo "Releasing Apicurio Data Models into Maven Central"
 echo "---------------------------------------------------"
-mvn clean deploy -P release -Dgpg.passphrase=$GPG_PASSPHRASE
+mvn clean deploy -Prelease -Dgpg.passphrase=$GPG_PASSPHRASE
 
 
 echo "---------------------------------------------------"
