@@ -110,7 +110,7 @@ git push origin v$RELEASE_VERSION
 echo "---------------------------------------------------"
 echo "Releasing Apicurio Data Models into Maven Central"
 echo "---------------------------------------------------"
-mvn clean deploy -Prelease -Dgpg.passphrase=$GPG_PASSPHRASE
+mvn deploy -Prelease -Dgpg.passphrase=$GPG_PASSPHRASE
 
 
 echo "---------------------------------------------------"
