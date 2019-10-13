@@ -132,6 +132,7 @@ yarn run build
 popd
 
 
+echo "---------------------------------------------------"
 echo "Update version in OpenShift template(s)"
 echo "---------------------------------------------------"
 pushd .
@@ -141,6 +142,7 @@ sed -i "s/latest-release/$RELEASE_VERSION/g" apicurio-standalone-template.yml
 popd
 
 
+echo "---------------------------------------------------"
 echo "Commit changes and push to Git"
 echo "---------------------------------------------------"
 git add .
