@@ -149,7 +149,13 @@ git push origin v$RELEASE_VERSION
 echo "---------------------------------------------------"
 echo "Building docker images."
 echo "---------------------------------------------------"
-mvn install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests -Ddocker
+pushd .
+cd distro/docker
+mvn package -DskipTests -Ddocker
+mvn package -Pjpa -DskipTests -Ddocker
+mvn package -Pkafka -DskipTests -Ddocker
+mvn package -Pstreams -DskipTests -Ddocker
+popd
 
 
 echo "---------------------------------------------------"
