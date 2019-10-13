@@ -138,12 +138,12 @@ echo "---------------------------------------------------"
 echo "Commit changes and push to Git"
 echo "---------------------------------------------------"
 git add .
-git commit -m "Prepare for release v$RELEASE_VERSION"
+git commit -m "Prepare for release $RELEASE_VERSION"
 git push origin $BRANCH
 gpg -s README.md
 rm README.md.gpg
-git tag -a -s -m "Tagging release v$RELEASE_VERSION" $RELEASE_VERSION
-git push origin v$RELEASE_VERSION
+git tag -a -s -m "Tagging release $RELEASE_VERSION" $RELEASE_VERSION
+git push origin $RELEASE_VERSION
 
 
 echo "---------------------------------------------------"
