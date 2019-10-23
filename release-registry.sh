@@ -151,10 +151,10 @@ echo "Building docker images."
 echo "---------------------------------------------------"
 pushd .
 cd distro/docker
-mvn package -DskipTests -Ddocker
-mvn package -Pjpa -DskipTests -Ddocker
-mvn package -Pkafka -DskipTests -Ddocker
-mvn package -Pstreams -DskipTests -Ddocker
+mvn package -Pprod -DskipTests -Ddocker
+mvn package -Pprod -Pjpa -DskipTests -Ddocker
+mvn package -Pprod -Pkafka -DskipTests -Ddocker
+mvn package -Pprod -Pstreams -DskipTests -Ddocker
 popd
 
 
