@@ -159,6 +159,12 @@ popd
 
 
 echo "---------------------------------------------------"
+echo "Releasing Apicurio Registry into Maven Central"
+echo "---------------------------------------------------"
+mvn install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests -Prelease -Dgpg.passphrase=$GPG_PASSPHRASE
+
+
+echo "---------------------------------------------------"
 echo " Updating version #s for next snapshot version"
 echo "---------------------------------------------------"
 mvn versions:set -DnewVersion=$DEV_VERSION
