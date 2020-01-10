@@ -103,6 +103,16 @@ mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:Apicurio/apicurio.github.io.git
 git clone git@github.com:apicurio/apicurio-studio.git
+git clone git@github.com:apicurio/apicurio-release-tool.git
+
+
+echo "---------------------------------------------------"
+echo " Build the release tool"
+echo "---------------------------------------------------"
+pushd .
+cd apicurio-release-tool
+mvn clean install
+popd
 
 
 echo "---------------------------------------------------"
@@ -184,7 +194,7 @@ echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --armor --detach-sign rel
 echo "---------------------------------------------------"
 echo "Performing automated GitHub release."
 echo "---------------------------------------------------"
-java -jar tools/release/target/apicurio-studio-tools-release-$RELEASE_VERSION.jar --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip --output-directory ./tools/release/target
+java -jar ../apicurio-release-tool/target/apicurio-release-tool.jar -r apicurio-studio --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --artifact ./releases/apicurio-studio-$RELEASE_VERSION-quickstart.zip --output-directory ./tools/release/target
 echo ""
 
 

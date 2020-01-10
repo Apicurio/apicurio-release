@@ -10,8 +10,11 @@ echo ""
 echo ""
 
 
-BRANCH=$1
-RELEASE_VERSION=$2
+RELEASE_VERSION=$1
+RELEASE_NAME=$2
+PREVIOUS_RELEASE_VERSION=$3
+DEV_VERSION=$4
+BRANCH=$5
 
 if [ -f .release.env ]
 then
@@ -35,14 +38,25 @@ then
   echo "Environment variable missing from .release.env file: GPG_PASSPHRASE"
 fi
 
-echo "---------------------------------------------------"
-echo " Tell me what version and branch we're releasing!"
-echo "---------------------------------------------------"
-echo ""
 
 if [ "x$RELEASE_VERSION" = "x" ]
 then
   read -p "Release Version: " RELEASE_VERSION
+fi
+
+if [ "x$RELEASE_NAME" = "x" ]
+then
+  read -p "Release Name: " RELEASE_NAME
+fi
+
+if [ "x$PREVIOUS_RELEASE_VERSION" = "x" ]
+then
+  read -p "Previous Release Version: " PREVIOUS_RELEASE_VERSION
+fi
+
+if [ "x$DEV_VERSION" = "x" ]
+then
+  read -p "New Development Version: " DEV_VERSION
 fi
 
 if [ "x$BRANCH" = "x" ]
@@ -57,6 +71,9 @@ fi
 
 echo "######################################"
 echo "Release Version:  $RELEASE_VERSION"
+echo "Release Name:     $RELEASE_NAME"
+echo "Previous Version: $PREVIOUS_RELEASE_VERSION"
+echo "Next Dev Version: $DEV_VERSION"
 echo "Branch:           $BRANCH"
 echo "######################################"
 echo ""
@@ -80,6 +97,16 @@ echo ""
 mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:apicurio/apicurito.git
+git clone git@github.com:apicurio/apicurio-release-tool.git
+
+
+echo "---------------------------------------------------"
+echo " Build the release tool"
+echo "---------------------------------------------------"
+pushd .
+cd apicurio-release-tool
+mvn clean install
+popd
 
 
 echo "---------------------------------------------------"
@@ -98,6 +125,13 @@ git commit -m "Prepare for release $RELEASE_VERSION" -s -S
 git push origin $BRANCH
 git tag -a -s -m "Tagging release $RELEASE_VERSION" $RELEASE_VERSION
 git push origin $RELEASE_VERSION
+
+
+echo "---------------------------------------------------"
+echo "Performing automated GitHub release."
+echo "---------------------------------------------------"
+java -jar ../apicurio-release-tool/target/apicurio-release-tool.jar -r apicurito --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --output-directory ./target
+echo ""
 
 
 echo "---------------------------------------------------"
