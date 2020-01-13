@@ -141,6 +141,18 @@ docker push apicurio/apicurito-ui:latest
 docker tag apicurio/apicurito-ui apicurio/apicurito-ui:$RELEASE_VERSION
 docker push apicurio/apicurito-ui:$RELEASE_VERSION
 
+
+echo "---------------------------------------------------"
+echo " Updating version #s for next snapshot version"
+echo "---------------------------------------------------"
+mvn versions:set -DnewVersion=$DEV_VERSION
+find . -name '*.versionsBackup' -exec rm -f {} \;
+git add .
+git commit -m "Update to next development version: $DEV_VERSION"
+git push origin $BRANCH
+popd
+
+
 echo ""
 echo ""
 echo "---------------------------------------------------"
