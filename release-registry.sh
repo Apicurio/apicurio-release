@@ -135,6 +135,7 @@ find . -name '*.versionsBackup' -exec rm -f {} \;
 echo "Validating Apicurio Registry maven build"
 mvn clean install -Pjpa
 mvn clean install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
+mvn verify -Pall -pl tests -Dmaven.javadoc.skip=true
 
 # echo "---------------------------------------------------"
 # echo " Validate native build"
