@@ -111,6 +111,16 @@ echo ""
 mkdir -p target/git-repos
 cd target/git-repos
 git clone git@github.com:Apicurio/apicurio-registry.git
+git clone git@github.com:apicurio/apicurio-release-tool.git
+
+
+echo "---------------------------------------------------"
+echo " Build the release tool"
+echo "---------------------------------------------------"
+pushd .
+cd apicurio-release-tool
+mvn clean install
+popd
 
 
 echo "---------------------------------------------------"
@@ -162,6 +172,13 @@ echo "---------------------------------------------------"
 echo "Releasing Apicurio Registry into Maven Central"
 echo "---------------------------------------------------"
 mvn install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests -Prelease -Dgpg.passphrase=$GPG_PASSPHRASE
+
+
+echo "---------------------------------------------------"
+echo "Performing automated GitHub release."
+echo "---------------------------------------------------"
+java -jar ../apicurio-release-tool/target/apicurio-release-tool.jar -r apicurio-release --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --output-directory ./target
+echo ""
 
 
 echo "---------------------------------------------------"
