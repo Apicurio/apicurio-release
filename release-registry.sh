@@ -178,7 +178,7 @@ mvn install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests -Prelease -Dgpg.pas
 echo "---------------------------------------------------"
 echo "Performing automated GitHub release."
 echo "---------------------------------------------------"
-java -jar ../apicurio-release-tool/target/apicurio-release-tool.jar -r apicurio-release --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --output-directory ./target
+java -jar ../apicurio-release-tool/target/apicurio-release-tool.jar -r apicurio-registry --release-name "$RELEASE_NAME" --release-tag $RELEASE_VERSION --previous-tag $PREVIOUS_RELEASE_VERSION --github-pat $GITHUB_AUTH_PAT --output-directory ./target
 echo ""
 
 
