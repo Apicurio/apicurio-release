@@ -57,25 +57,6 @@ rm -rf target
 mkdir -p target
 
 
-#echo "---------------------------------------------------"
-#echo " Downloading and installing GraalVM"
-#echo "---------------------------------------------------"
-# echo ""
-# mkdir -p target
-# pushd .
-# cd target
-# curl https://github.com/oracle/graal/releases/download/vm-19.1.1/graalvm-ce-linux-amd64-19.1.1.tar.gz -O -J -L
-# tar xfz graalvm-ce-linux-amd64-19.1.1.tar.gz
-# mv graalvm-ce-19.1.1 .graalvm
-# cd .graalvm
-# GRAALVM_HOME=`pwd`
-# export GRAALVM_HOME
-# echo "GraalVM downloaded and installed to $GRAALVM_HOME"
-# echo "Installing 'native-image'"
-# $GRAALVM_HOME/bin/gu install native-image
-# popd
-
-
 echo "---------------------------------------------------"
 echo " Checking out required git repos."
 echo "---------------------------------------------------"
@@ -92,32 +73,33 @@ rm -rf ~/.m2/repository/io/apicurio
 pushd .
 cd apicurio-registry
 git checkout $BRANCH
-./mvnw clean package
+./mvnw clean install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
+./mvnw -Pjpa test package
+./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true
 popd
-
-
-# echo "---------------------------------------------------"
-# echo " Validate native build"
-# echo "---------------------------------------------------"
-# pushd .
-# cd apicurio-registry
-# ./mvnw clean package verify -Pnative
-# popd
 
 
 echo "---------------------------------------------------"
 echo "Building docker images."
 echo "---------------------------------------------------"
 pushd .
-cd apicurio-registry/
-docker build -t="apicurio/apicurio-registry" -t="apicurio/apicurio-registry:latest-snapshot" -f distro/docker/src/main/docker/Dockerfile.jvm .
+cd apicurio-registry/distro/docker
+mvn package -Pprod -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+mvn package -Pprod -Pjpa -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+mvn package -Pprod -Pinfinispan -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+mvn package -Pprod -Pkafka -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+mvn package -Pprod -Pstreams -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
 popd
+
 
 # echo "---------------------------------------------------"
 # echo "Pushing docker images."
 # echo "---------------------------------------------------"
-docker push apicurio/apicurio-registry:latest
-docker push apicurio/apicurio-registry:latest-snapshot
+docker push apicurio/apicurio-registry-mem:latest-snapshot
+docker push apicurio/apicurio-registry-jpa:latest-snapshot
+docker push apicurio/apicurio-registry-infinispan:latest-snapshot
+docker push apicurio/apicurio-registry-kafka:latest-snapshot
+docker push apicurio/apicurio-registry-streams:latest-snapshot
 
 echo ""
 echo ""

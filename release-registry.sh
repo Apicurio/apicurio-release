@@ -164,6 +164,7 @@ pushd .
 cd distro/docker
 mvn package -Pprod -DskipTests -Ddocker
 mvn package -Pprod -Pjpa -DskipTests -Ddocker
+mvn package -Pprod -Pinfinispan -DskipTests -Ddocker
 mvn package -Pprod -Pkafka -DskipTests -Ddocker
 mvn package -Pprod -Pstreams -DskipTests -Ddocker
 popd
@@ -197,12 +198,19 @@ echo "---------------------------------------------------"
 echo "Pushing docker images."
 echo "---------------------------------------------------"
 docker push apicurio/apicurio-registry-mem:latest
+docker push apicurio/apicurio-registry-mem:latest-release
 docker push apicurio/apicurio-registry-mem:$RELEASE_VERSION
 docker push apicurio/apicurio-registry-jpa:latest
+docker push apicurio/apicurio-registry-jpa:latest-release
 docker push apicurio/apicurio-registry-jpa:$RELEASE_VERSION
+docker push apicurio/apicurio-registry-infinispan:latest
+docker push apicurio/apicurio-registry-infinispan:latest-release
+docker push apicurio/apicurio-registry-infinispan:$RELEASE_VERSION
 docker push apicurio/apicurio-registry-kafka:latest
+docker push apicurio/apicurio-registry-kafka:latest-release
 docker push apicurio/apicurio-registry-kafka:$RELEASE_VERSION
 docker push apicurio/apicurio-registry-streams:latest
+docker push apicurio/apicurio-registry-streams:latest-release
 docker push apicurio/apicurio-registry-streams:$RELEASE_VERSION
 
 echo ""
