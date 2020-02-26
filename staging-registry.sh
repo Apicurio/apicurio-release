@@ -73,8 +73,8 @@ rm -rf ~/.m2/repository/io/apicurio
 pushd .
 cd apicurio-registry
 git checkout $BRANCH
-./mvnw clean install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
-./mvnw -Pjpa test package
+./mvnw clean install -Pprod -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
+./mvnw test package -Pprod -Pjpa
 ./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true
 popd
 

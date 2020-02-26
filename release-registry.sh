@@ -133,8 +133,8 @@ git checkout $BRANCH
 mvn versions:set -DnewVersion=$RELEASE_VERSION
 find . -name '*.versionsBackup' -exec rm -f {} \;
 echo "Validating Apicurio Registry maven build"
-mvn clean install -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
-mvn -Pjpa test package
+mvn clean install -Pprod -Pjpa -Pinfinispan -Pkafka -Pstreams -DskipTests
+mvn test package -Pprod -Pjpa
 mvn verify -Pall -pl tests -Dmaven.javadoc.skip=true
 
 # echo "---------------------------------------------------"
